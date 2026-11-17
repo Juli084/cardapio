@@ -1,187 +1,192 @@
-const menu = document.getElementById("menu")
-const cartBtn = document.getElementById("cart-btn")
-const cartModal = document.getElementById("cart-modal")
-const cartItemsContainer = document.getElementById("cart-items")
-const cartTotal = document.getElementById("cart-total")
-const checkoutBtn = document.getElementById("checkout-btn")
-const closeModalBtn = document.getElementById("close-modal-btn")
-const cartCounter = document.getElementById("cart-count")
-const addressInput = document.getElementById("address")
-const addressWarn = document.getElementById("address-warn")
+// Configuração do cardápio. Horário e número ficam aqui, num lugar só.
+const CONFIG = {
+  whatsapp: "15998250732",
+  abre: 17, // hora de abertura (inclusive)
+  fecha: 23, // hora de fechamento (exclusive)
+  fusoHorario: "America/Sao_Paulo",
+};
+
+const moeda = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+const cartBtn = document.getElementById("cart-btn");
+const cartModal = document.getElementById("cart-modal");
+const cartItemsContainer = document.getElementById("cart-items");
+const cartTotal = document.getElementById("cart-total");
+const checkoutBtn = document.getElementById("checkout-btn");
+const closeModalBtn = document.getElementById("close-modal-btn");
+const cartCounter = document.getElementById("cart-count");
+const addressInput = document.getElementById("address");
+const addressWarn = document.getElementById("address-warn");
+const statusHorario = document.getElementById("date-span");
+const aviso = document.getElementById("aviso");
 
 let cart = [];
 
-// Abrir o modal do carrinho
-cartBtn.addEventListener("click", function() {
-    updateCartModal();
-    cartModal.style.display = "flex"    
-})
+// O preço exibido em cada produto sai do mesmo data-price que vai para o
+// carrinho, para os dois nunca divergirem.
+document.querySelectorAll(".add-to-cart-btn").forEach((botao) => {
+  const alvo = botao.parentElement.querySelector(".preco");
+  if (alvo) alvo.textContent = moeda.format(Number(botao.dataset.price));
+});
 
-// Fechar modal quando clicar fora
-cartModal.addEventListener("click", function(event) {
-    if(event.target === cartModal){
-        cartModal.style.display = "none"
-    }
-})
+function abrirCarrinho() {
+  atualizarCarrinho();
+  cartModal.style.display = "flex";
+  closeModalBtn.focus();
+}
 
-closeModalBtn.addEventListener("click", function() {
-    cartModal.style.display = "none"
-})
+function fecharCarrinho() {
+  cartModal.style.display = "none";
+  cartBtn.focus();
+}
 
-menu.addEventListener("click", function(event) {
+cartBtn.addEventListener("click", abrirCarrinho);
+closeModalBtn.addEventListener("click", fecharCarrinho);
 
-    let parentButton = event.target.closest(".add-to-cart-btn")
+cartModal.addEventListener("click", (event) => {
+  if (event.target === cartModal) fecharCarrinho();
+});
 
-    if(parentButton) {
-        const name = parentButton.getAttribute("data-name")
-        const price = parseFloat(parentButton.getAttribute("data-price"))
-        addToCart(name, price)
-    }
-})
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && cartModal.style.display === "flex") fecharCarrinho();
+});
 
-// função para adicionar itens no carrinho
+// Um ouvinte só para lanches e bebidas.
+document.addEventListener("click", (event) => {
+  const botao = event.target.closest(".add-to-cart-btn");
+  if (botao) adicionar(botao.dataset.name, Number(botao.dataset.price));
+});
 
-function addToCart(name, price){
-    const existingItem = cart.find(item => item.name === name)
+function adicionar(nome, preco) {
+  const existente = cart.find((item) => item.nome === nome);
+  if (existente) {
+    existente.quantidade += 1;
+  } else {
+    cart.push({ nome, preco, quantidade: 1 });
+  }
+  atualizarCarrinho();
+}
 
-        if(existingItem){
-            existingItem.quantity += 1;
-        }else{
-            cart.push({
-                name,
-                price,
-                quantity: 1,
-            })
-        }
-        updateCartModal()
-        
-    }
+function remover(nome) {
+  const indice = cart.findIndex((item) => item.nome === nome);
+  if (indice === -1) return;
 
-    function updateCartModal(){
-        cartItemsContainer.innerHTML = "";
-        let total = 0;
+  if (cart[indice].quantidade > 1) {
+    cart[indice].quantidade -= 1;
+  } else {
+    cart.splice(indice, 1);
+  }
+  atualizarCarrinho();
+}
 
-        cart.forEach(item => {
-            const cartItemElement = document.createElement("div");
+function totalDoCarrinho() {
+  return cart.reduce((soma, item) => soma + item.preco * item.quantidade, 0);
+}
 
-            cartItemElement.classList.add("flex", "justify-between", "mb-4", "flex-col")
-            cartItemElement.innerHTML = `
-            <div class="flex items-center justify-between">
-                <div>
-                <p class="font-medium">Produto: ${item.name}</p>
-                <p>Qtd: ${item.quantity}</p>
-                <p class="font-medium mt-2">R$ ${item.price.toFixed(2)}</p>
-                </div>
+// O carrinho é montado com textContent: nenhum texto vira HTML.
+function atualizarCarrinho() {
+  cartItemsContainer.replaceChildren();
 
-                <button class="remove-from-cart-btn" data-name="${item.name}">
-                    Remover
-                </button>
-            `
-            total += item.price * item.quantity;
+  for (const item of cart) {
+    const linha = document.createElement("div");
+    linha.className = "flex items-center justify-between mb-4";
 
-            cartItemsContainer.appendChild(cartItemElement)
-        })
+    const info = document.createElement("div");
+    const nome = document.createElement("p");
+    nome.className = "font-medium";
+    nome.textContent = `Produto: ${item.nome}`;
+    const quantidade = document.createElement("p");
+    quantidade.textContent = `Qtd: ${item.quantidade}`;
+    const preco = document.createElement("p");
+    preco.className = "font-medium mt-2";
+    preco.textContent = moeda.format(item.preco);
+    info.append(nome, quantidade, preco);
 
-        cartTotal.textContent = total.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.textContent = "Remover";
+    botao.setAttribute("aria-label", `Remover uma unidade de ${item.nome}`);
+    botao.addEventListener("click", () => remover(item.nome));
 
-        cartCounter.innerHTML = cart.length;
-    }
+    linha.append(info, botao);
+    cartItemsContainer.append(linha);
+  }
 
-    // função para remover itens do carrinho
-    cartItemsContainer.addEventListener("click", function(event) {
-        if(event.target.classList.contains("remove-from-cart-btn")){
-            const name = event.target.getAttribute("data-name")
+  cartTotal.textContent = moeda.format(totalDoCarrinho());
+  cartCounter.textContent = String(cart.reduce((soma, item) => soma + item.quantidade, 0));
+}
 
-            removeItemCart(name);
-        }
-    })
+addressInput.addEventListener("input", () => {
+  if (addressInput.value.trim() !== "") {
+    addressInput.classList.remove("border-red-600");
+    addressWarn.classList.add("hidden");
+  }
+});
 
-    function removeItemCart(name){
-        const index = cart.findIndex(item => item.name === name);
+checkoutBtn.addEventListener("click", () => {
+  if (!estaAberto()) {
+    avisar(`Estamos fechados agora. Funcionamos das ${CONFIG.abre}h às ${CONFIG.fecha}h.`);
+    return;
+  }
+  if (cart.length === 0) {
+    avisar("Seu carrinho está vazio.");
+    return;
+  }
 
-        if(index !== -1){
-            const item = cart[index];
+  const endereco = addressInput.value.trim();
+  if (endereco === "") {
+    addressWarn.classList.remove("hidden");
+    addressInput.classList.add("border-red-600");
+    addressInput.focus();
+    return;
+  }
 
-            if(item.quantity > 1){
-                item.quantity -= 1;
-                updateCartModal();
-                return;
-            }
+  // A mensagem inteira, endereço incluído, passa por encodeURIComponent:
+  // um "#" ou "&" no endereço cortaria o texto no meio.
+  const mensagem = [
+    "Pedido:",
+    ...cart.map((item) => `${item.quantidade}x ${item.nome}: ${moeda.format(item.preco * item.quantidade)}`),
+    `Total: ${moeda.format(totalDoCarrinho())}`,
+    `Endereço: ${endereco}`,
+  ].join("\n");
 
-            cart.splice(index, 1);
-            updateCartModal();
-        }
-    }
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensagem)}`, "_blank", "noopener");
 
-    addressInput.addEventListener("input", function(event){
-        let inputValue = event.target.value;
+  cart = [];
+  atualizarCarrinho();
+  fecharCarrinho();
+});
 
-        if(inputValue !== ""){
-            addressInput.classList.remove("border-red-600")
-            addressWarn.classList.add("hidden")
-        }
+// O horário é o de Brasília, não o relógio de quem acessa.
+function horaAtual() {
+  const partes = new Intl.DateTimeFormat("pt-BR", {
+    hour: "numeric",
+    hourCycle: "h23",
+    timeZone: CONFIG.fusoHorario,
+  }).formatToParts(new Date());
+  return Number(partes.find((parte) => parte.type === "hour").value);
+}
 
-    })
-        //finalizar pedido
+function estaAberto() {
+  const hora = horaAtual();
+  return hora >= CONFIG.abre && hora < CONFIG.fecha;
+}
 
-    checkoutBtn.addEventListener("click", function(){
-    const isOpen = checkRestaurantOpen();
-    if(!isOpen){
-        Toastify({
-            text: "Ops, estamos fechados no momento, tente novamente mais tarde ;)",
-            duration: 3000,
-            close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-              background: "#Ef4444",
-            },
-          }).showToast();
-        return;
-    }
+function mostrarHorario() {
+  const aberto = estaAberto();
+  statusHorario.classList.toggle("bg-green-500", aberto);
+  statusHorario.classList.toggle("bg-red-600", !aberto);
+}
 
-        if(cart.length === 0) return;
-        if(addressInput.value === "") {
-            addressWarn.classList.remove("hidden")
-            addressInput.classList.add("border-red-600")
-            return;
-        }
+mostrarHorario();
+setInterval(mostrarHorario, 60_000);
 
-        // enviar pedido para api whatsapp
-        const cartItems = cart.map((item) => {
-            return (
-                ` ${item.name} Quantidade: (${item.quantity}) Preço: R$${item.price} |`
-            )
-        }).join("")
-        
-        const message = encodeURIComponent(cartItems)
-        const phone = "15998250732"
-
-        window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
-
-        cart = [];
-        updateCartModal();
-    })
-
-// verificar a hora e manipular horario
-
-    function checkRestaurantOpen(){
-        const data = new Date();
-        const hora = data.getHours();
-        return hora >= 17 && hora < 23;
-    }
-
-    const spanItem = document.getElementById("date-span")
-    const isOpen = checkRestaurantOpen();
-
-    if(isOpen){
-        spanItem.classList.remove("bg-red-600");
-        spanItem.classList.add("bg-green-500")
-    }else{
-        spanItem.classList.remove("bg-green-500")
-        spanItem.classList.add("bg-red-600")
-    }
+let temporizadorAviso;
+function avisar(texto) {
+  const mensagem = document.createElement("p");
+  mensagem.className = "bg-red-500 text-white px-4 py-2 rounded shadow-lg";
+  mensagem.textContent = texto;
+  aviso.replaceChildren(mensagem);
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => aviso.replaceChildren(), 4000);
+}
