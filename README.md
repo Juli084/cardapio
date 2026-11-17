@@ -25,11 +25,11 @@ O CSS é gerado pelo Tailwind a partir de `styles/style.css`:
 
 ```bash
 npm install
-npm run build
+npm run build:css
 ```
 
-`npm run dev` regera o CSS a cada alteração. O arquivo `styles/output.css` fica versionado para o
-deploy estático funcionar sem build.
+`npm run dev` regera o CSS a cada alteração. O arquivo `styles/output.css` fica versionado: o deploy
+serve a pasta como site estático, sem etapa de build.
 
 ## Configuração
 
