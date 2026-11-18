@@ -8,7 +8,7 @@ const formatoReal = new Intl.NumberFormat("pt-BR", { style: "currency", currency
 export function reais(valor: Centavos): string {
   // O Intl separa "R$" do número com espaço não separável; troco por espaço comum
   // para o texto copiado e a mensagem do WhatsApp ficarem iguais ao que se lê.
-  return formatoReal.format(valor / 100).replace(/ /g, " ");
+  return formatoReal.format(valor / 100).replace(/s/g, " ");
 }
 
 export function precoUnitario(produto: Produto, escolhas: Escolhas): Centavos {
