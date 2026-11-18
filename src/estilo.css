@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+/*
+ * Tema escuro e quente: as fotos de comida ganham contraste e a cor da marca fica só nos
+ * pontos de ação (adicionar, sacola, enviar). A cor primária vem da configuração da loja.
+ */
+:root {
+  --cor-primaria: #f4a31a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-fundo: #15110e;
+  --color-superficie: #1f1914;
+  --color-elevada: #2a221c;
+  --color-borda: #3b3129;
+  --color-texto: #f7efe6;
+  --color-suave: #bfb2a4;
+  --color-primaria: var(--cor-primaria);
+  --color-sobre-primaria: #1b1206;
+  --color-aberto: #4cc38a;
+  --color-fechado: #f2777a;
+}
+
+html {
+  scroll-padding-top: 7.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-fundo);
+  color: var(--color-texto);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* O título dos painéis recebe foco por código (tabindex="-1") e não precisa do anel. */
+:focus-visible:not([tabindex="-1"]) {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Painéis: folha que sobe de baixo no celular, janela centralizada a partir do tablet. */
+dialog.painel {
+  margin: auto auto 0;
+  width: 100%;
+  max-width: 36rem;
+  max-height: min(92dvh, 52rem);
+  padding: 0;
+  border: 0;
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  overflow: hidden;
+}
+
+dialog.painel[open] {
+  display: flex;
+  flex-direction: column;
+  animation: subir 0.22s ease-out;
+}
+
+dialog.painel::backdrop {
+  background: rgb(0 0 0 / 0.62);
+}
+
+@media (min-width: 768px) {
+  dialog.painel {
+    margin: auto;
+    border-radius: 1.25rem;
+    max-height: min(88dvh, 52rem);
+  }
+}
+
+@keyframes subir {
+  from {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.painel[open] {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.sem-barra {
+  scrollbar-width: none;
+}
+.sem-barra::-webkit-scrollbar {
+  display: none;
+}
+
+input,
+select,
+textarea {
+  font-size: 1rem;
+}

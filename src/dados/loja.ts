@@ -1,0 +1,477 @@
+import type { GrupoDeOpcoes, Loja } from "../dominio/tipos.ts";
+
+/*
+ * Configuração da loja de demonstração. Para montar o cardápio de outra lanchonete,
+ * só este arquivo e as fotos em public/img mudam. Preços em centavos: 3290 = R$ 32,90.
+ * O passo a passo está em docs/nova-loja.md.
+ */
+
+const PONTO: GrupoDeOpcoes = {
+  id: "ponto",
+  nome: "Ponto da carne",
+  minimo: 1,
+  maximo: 1,
+  opcoes: [
+    { id: "mal", nome: "Mal passado" },
+    { id: "ao-ponto", nome: "Ao ponto" },
+    { id: "bem", nome: "Bem passado" },
+  ],
+};
+
+const ADICIONAIS: GrupoDeOpcoes = {
+  id: "adicionais",
+  nome: "Adicionais",
+  minimo: 0,
+  maximo: 4,
+  opcoes: [
+    { id: "bacon", nome: "Bacon", acrescimo: 500 },
+    { id: "cheddar", nome: "Cheddar", acrescimo: 400 },
+    { id: "ovo", nome: "Ovo", acrescimo: 300 },
+    { id: "cebola-caramelizada", nome: "Cebola caramelizada", acrescimo: 400 },
+    { id: "blend-extra", nome: "Blend extra de 160 g", acrescimo: 1200 },
+  ],
+};
+
+const ADICIONAIS_CHAPA: GrupoDeOpcoes = {
+  id: "adicionais",
+  nome: "Adicionais",
+  minimo: 0,
+  maximo: 4,
+  opcoes: [
+    { id: "bacon", nome: "Bacon", acrescimo: 500 },
+    { id: "cheddar", nome: "Cheddar", acrescimo: 400 },
+    { id: "ovo", nome: "Ovo", acrescimo: 300 },
+    { id: "hamburguer-extra", nome: "Hambúrguer extra", acrescimo: 600 },
+  ],
+};
+
+const VIRAR_COMBO: GrupoDeOpcoes = {
+  id: "combo",
+  nome: "Transforme em combo",
+  minimo: 0,
+  maximo: 1,
+  opcoes: [
+    { id: "batata-coca", nome: "Batata frita P + Coca-Cola lata", acrescimo: 1200 },
+    { id: "batata-coca-zero", nome: "Batata frita P + Coca-Cola sem açúcar lata", acrescimo: 1200 },
+    { id: "batata-guarana", nome: "Batata frita P + Guaraná lata", acrescimo: 1200 },
+  ],
+};
+
+const BEBIDA_DO_COMBO: GrupoDeOpcoes = {
+  id: "bebida",
+  nome: "Bebida",
+  minimo: 1,
+  maximo: 1,
+  opcoes: [
+    { id: "coca", nome: "Coca-Cola lata" },
+    { id: "coca-zero", nome: "Coca-Cola sem açúcar lata" },
+    { id: "guarana", nome: "Guaraná lata" },
+    { id: "suco", nome: "Suco natural de laranja 500 ml", acrescimo: 400 },
+  ],
+};
+
+export const loja = {
+  id: "francesco",
+  nome: "Hamburgueria do Francesco",
+  descricao:
+    "Hambúrguer artesanal, lanches na chapa e porções em Sorocaba. Peça pelo cardápio e finalize no WhatsApp.",
+  url: "https://cardapio-gilt-ten.vercel.app",
+  endereco: { rua: "Rua do Francesco, 100", bairro: "Centro", cidade: "Sorocaba", uf: "SP" },
+  whatsapp: "5515998250732",
+  fusoHorario: "America/Sao_Paulo",
+  horarios: [
+    [["17:00", "23:00"]],
+    [],
+    [["18:00", "23:00"]],
+    [["18:00", "23:00"]],
+    [["18:00", "23:00"]],
+    [["18:00", "00:30"]],
+    [["18:00", "00:30"]],
+  ],
+  entrega: {
+    ativa: true,
+    prazo: "40 a 60 min",
+    pedidoMinimo: 2500,
+    aceitaOutrosBairros: true,
+    bairros: [
+      { nome: "Centro", taxa: 500 },
+      { nome: "Além Ponte", taxa: 600 },
+      { nome: "Jardim Vergueiro", taxa: 600 },
+      { nome: "Vila Hortência", taxa: 600 },
+      { nome: "Vila Trujillo", taxa: 600 },
+      { nome: "Campolim", taxa: 700 },
+      { nome: "Parque Campolim", taxa: 700 },
+      { nome: "Jardim Santa Rosália", taxa: 700 },
+      { nome: "Wanel Ville", taxa: 800 },
+      { nome: "Éden", taxa: 1000 },
+    ],
+  },
+  retirada: { ativa: true, prazo: "20 a 30 min" },
+  pagamento: {
+    pix: {
+      // Chave de exemplo do manual do Pix do Banco Central: o código gerado tem o formato
+      // certo, mas não transfere para ninguém. Numa loja de verdade, vai a chave da loja.
+      chave: "123e4567-e12b-12d1-a456-426655440000",
+      recebedor: "Hamburgueria do Francesco",
+      cidade: "Sorocaba",
+    },
+    cartao: true,
+    dinheiro: true,
+  },
+  marca: {
+    logo: { src: "/img/classico.webp", alt: "", largura: 408, altura: 408 },
+    capa: { src: "/img/capa.webp", alt: "", largura: 1920, altura: 680 },
+    compartilhamento: {
+      src: "/img/compartilhar.jpg",
+      alt: "Hamburgueria do Francesco: hambúrguer artesanal em Sorocaba",
+      largura: 1200,
+      altura: 630,
+    },
+    corPrimaria: "#f4a31a",
+  },
+  demonstracao: {
+    aviso: "Loja fictícia para demonstração: produtos, preços e chave Pix são de exemplo.",
+  },
+  credito: { texto: "Cardápio digital por iTech Soluções Digitais", url: "https://itechsolucoesdigitais.com" },
+  sugestoes: ["batata-frita", "guarana-lata", "brownie", "coca-cola-lata", "milkshake"],
+  categorias: [
+    { id: "combos", nome: "Combos", descricao: "Lanche, batata e bebida por menos do que separado." },
+    { id: "artesanais", nome: "Artesanais", descricao: "Blend bovino de 160 g no pão brioche." },
+    { id: "chapa", nome: "Lanches na chapa" },
+    { id: "porcoes", nome: "Porções" },
+    { id: "bebidas", nome: "Bebidas" },
+    { id: "sobremesas", nome: "Sobremesas" },
+  ],
+  produtos: [
+    {
+      id: "combo-classico",
+      categoria: "combos",
+      nome: "Combo Clássico",
+      descricao: "Clássico, batata frita P e uma bebida.",
+      preco: 4490,
+      precoAnterior: 5580,
+      imagem: { src: "/img/classico.webp", alt: "Hambúrguer clássico no pão brioche", largura: 408, altura: 408 },
+      selos: ["mais-pedido"],
+      grupos: [PONTO, BEBIDA_DO_COMBO, ADICIONAIS],
+    },
+    {
+      id: "combo-smash",
+      categoria: "combos",
+      nome: "Combo Smash",
+      descricao: "Smash Duplo, batata frita P e uma bebida.",
+      preco: 4890,
+      precoAnterior: 5980,
+      grupos: [BEBIDA_DO_COMBO, ADICIONAIS],
+    },
+    {
+      id: "combo-casal",
+      categoria: "combos",
+      nome: "Combo Casal",
+      descricao: "Dois Clássicos, batata frita G e Coca-Cola 2 L.",
+      preco: 9990,
+      precoAnterior: 11160,
+      serve: "Serve 2 pessoas",
+      grupos: [
+        { ...PONTO, id: "ponto-1", nome: "Ponto do 1º hambúrguer" },
+        { ...PONTO, id: "ponto-2", nome: "Ponto do 2º hambúrguer" },
+      ],
+    },
+    {
+      id: "classico",
+      categoria: "artesanais",
+      nome: "Clássico",
+      descricao: "Blend de 160 g, queijo prato, alface, tomate, cebola roxa e molho da casa.",
+      preco: 3290,
+      imagem: { src: "/img/classico.webp", alt: "Hambúrguer clássico no pão brioche", largura: 408, altura: 408 },
+      selos: ["mais-pedido"],
+      grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "especial",
+      categoria: "artesanais",
+      nome: "Especial do Francesco",
+      descricao: "Dois blends de 160 g, cheddar, bacon, cebola caramelizada e barbecue da casa.",
+      preco: 4990,
+      imagem: {
+        src: "/img/especial.webp",
+        alt: "Hambúrguer alto com queijo derretido, tomate e cebola roxa, ao lado de batatas fritas",
+        largura: 408,
+        altura: 408,
+      },
+      selos: ["mais-pedido"],
+      grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "smash-duplo",
+      categoria: "artesanais",
+      nome: "Smash Duplo",
+      descricao: "Dois smash de 90 g, cheddar duplo, picles e cebola na chapa.",
+      preco: 3690,
+      selos: ["novo"],
+      grupos: [ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "cheddar-bacon",
+      categoria: "artesanais",
+      nome: "Cheddar Bacon",
+      descricao: "Blend de 160 g, cheddar cremoso, bacon crocante e maionese de alho.",
+      preco: 3990,
+      grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "picante",
+      categoria: "artesanais",
+      nome: "Pimenta",
+      descricao: "Blend de 160 g, pepper jack, jalapeño, cebola crispy e maionese de chipotle.",
+      preco: 4190,
+      selos: ["picante"],
+      grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "frango-crispy",
+      categoria: "artesanais",
+      nome: "Frango Crispy",
+      descricao: "Sobrecoxa empanada, alface, tomate e maionese de ervas.",
+      preco: 3490,
+      grupos: [ADICIONAIS, VIRAR_COMBO],
+    },
+    {
+      id: "grao-de-bico",
+      categoria: "artesanais",
+      nome: "Grão-de-bico",
+      descricao: "Hambúrguer de grão-de-bico, queijo prato, rúcula, tomate e maionese de ervas.",
+      preco: 3390,
+      selos: ["vegetariano"],
+      grupos: [VIRAR_COMBO],
+    },
+    {
+      id: "x-salada",
+      categoria: "chapa",
+      nome: "X-Salada",
+      descricao: "Hambúrguer, queijo, alface, tomate e maionese no pão de hambúrguer.",
+      preco: 2490,
+      grupos: [ADICIONAIS_CHAPA],
+    },
+    {
+      id: "x-bacon",
+      categoria: "chapa",
+      nome: "X-Bacon",
+      descricao: "Hambúrguer, queijo, bacon, alface, tomate e maionese.",
+      preco: 2890,
+      grupos: [ADICIONAIS_CHAPA],
+    },
+    {
+      id: "x-tudo",
+      categoria: "chapa",
+      nome: "X-Tudo",
+      descricao: "Hambúrguer, presunto, queijo, bacon, ovo, salsicha, alface, tomate, milho e batata palha.",
+      preco: 3490,
+      selos: ["mais-pedido"],
+      grupos: [ADICIONAIS_CHAPA],
+    },
+    {
+      id: "cachorro-quente",
+      categoria: "chapa",
+      nome: "Cachorro-quente",
+      descricao: "Salsicha, vinagrete, batata palha, ketchup e mostarda.",
+      preco: 1690,
+      imagem: {
+        src: "/img/cachorro-quente.webp",
+        alt: "Cachorro-quente com vinagrete e batata palha",
+        largura: 480,
+        altura: 480,
+      },
+      grupos: [
+        {
+          id: "adicionais",
+          nome: "Adicionais",
+          minimo: 0,
+          maximo: 3,
+          opcoes: [
+            { id: "salsicha", nome: "Salsicha extra", acrescimo: 300 },
+            { id: "cheddar", nome: "Cheddar", acrescimo: 400 },
+            { id: "bacon", nome: "Bacon", acrescimo: 500 },
+          ],
+        },
+      ],
+    },
+    {
+      id: "choripan",
+      categoria: "chapa",
+      nome: "Choripán",
+      descricao: "Pão francês, linguiça assada, vinagrete e chimichurri.",
+      preco: 2790,
+      imagem: {
+        src: "/img/choripan.webp",
+        alt: "Choripán com linguiça, vinagrete e chimichurri",
+        largura: 480,
+        altura: 320,
+      },
+    },
+    {
+      id: "batata-frita",
+      categoria: "porcoes",
+      nome: "Batata frita",
+      descricao: "Batata palito sequinha com sal e páprica.",
+      preco: 1590,
+      selos: ["mais-pedido"],
+      grupos: [
+        {
+          id: "tamanho",
+          nome: "Tamanho",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "p", nome: "P (200 g)" },
+            { id: "m", nome: "M (400 g)", acrescimo: 700 },
+            { id: "g", nome: "G (600 g)", acrescimo: 1400 },
+          ],
+        },
+        {
+          id: "molhos",
+          nome: "Molhos",
+          minimo: 0,
+          maximo: 2,
+          opcoes: [
+            { id: "maionese-alho", nome: "Maionese de alho", acrescimo: 300 },
+            { id: "barbecue", nome: "Barbecue da casa", acrescimo: 300 },
+            { id: "cheddar", nome: "Cheddar cremoso", acrescimo: 400 },
+          ],
+        },
+      ],
+    },
+    {
+      id: "batata-cheddar-bacon",
+      categoria: "porcoes",
+      nome: "Batata com cheddar e bacon",
+      descricao: "Batata frita coberta de cheddar cremoso e bacon em cubos.",
+      preco: 3290,
+      serve: "Serve 2 pessoas",
+    },
+    {
+      id: "onion-rings",
+      categoria: "porcoes",
+      nome: "Onion rings",
+      descricao: "Doze anéis de cebola empanados, com barbecue da casa.",
+      preco: 2490,
+    },
+    {
+      id: "mandioca",
+      categoria: "porcoes",
+      nome: "Mandioca frita",
+      descricao: "Mandioca cozida e frita, com manteiga de garrafa.",
+      preco: 2290,
+      serve: "Serve 2 pessoas",
+    },
+    {
+      id: "coca-cola-lata",
+      categoria: "bebidas",
+      nome: "Coca-Cola lata 350 ml",
+      preco: 700,
+      imagem: { src: "/img/coca-cola-lata.webp", alt: "Lata de Coca-Cola", largura: 408, altura: 408 },
+      grupos: [
+        {
+          id: "versao",
+          nome: "Versão",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "original", nome: "Original" },
+            { id: "sem-acucar", nome: "Sem açúcar" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "guarana-lata",
+      categoria: "bebidas",
+      nome: "Guaraná lata 350 ml",
+      preco: 650,
+      imagem: { src: "/img/guarana-lata.webp", alt: "Lata de guaraná", largura: 408, altura: 408 },
+    },
+    {
+      id: "coca-cola-2l",
+      categoria: "bebidas",
+      nome: "Coca-Cola 2 L",
+      preco: 1590,
+    },
+    {
+      id: "suco",
+      categoria: "bebidas",
+      nome: "Suco natural 500 ml",
+      descricao: "Feito na hora.",
+      preco: 1190,
+      grupos: [
+        {
+          id: "sabor",
+          nome: "Sabor",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "laranja", nome: "Laranja" },
+            { id: "limao", nome: "Limão" },
+            { id: "maracuja", nome: "Maracujá" },
+            { id: "abacaxi-hortela", nome: "Abacaxi com hortelã" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "agua",
+      categoria: "bebidas",
+      nome: "Água mineral 500 ml",
+      preco: 450,
+      grupos: [
+        {
+          id: "tipo",
+          nome: "Tipo",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "sem-gas", nome: "Sem gás" },
+            { id: "com-gas", nome: "Com gás" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "milkshake",
+      categoria: "sobremesas",
+      nome: "Milkshake",
+      descricao: "Batido com sorvete de creme e chantilly.",
+      preco: 1890,
+      selos: ["novo"],
+      grupos: [
+        {
+          id: "sabor",
+          nome: "Sabor",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "chocolate", nome: "Chocolate" },
+            { id: "morango", nome: "Morango" },
+            { id: "doce-de-leite", nome: "Doce de leite" },
+            { id: "maltado", nome: "Maltado" },
+          ],
+        },
+        {
+          id: "tamanho",
+          nome: "Tamanho",
+          minimo: 1,
+          maximo: 1,
+          opcoes: [
+            { id: "400", nome: "400 ml" },
+            { id: "500", nome: "500 ml", acrescimo: 400 },
+          ],
+        },
+      ],
+    },
+    {
+      id: "brownie",
+      categoria: "sobremesas",
+      nome: "Brownie com sorvete",
+      descricao: "Brownie de chocolate meio amargo, sorvete de creme e calda quente.",
+      preco: 1990,
+    },
+  ],
+} satisfies Loja;
