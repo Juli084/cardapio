@@ -60,6 +60,8 @@ export function FolhaDoProduto({ produto, onAdicionar, onFechar }: Props) {
         {produto.imagem ? (
           <img
             src={produto.imagem.src}
+            srcset={produto.imagem.srcset}
+            sizes="(min-width: 36rem) 36rem, 100vw"
             alt={produto.imagem.alt}
             width={produto.imagem.largura}
             height={produto.imagem.altura}

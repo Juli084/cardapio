@@ -108,7 +108,14 @@ export function Sacola({
                       class="flex w-full items-center gap-3 rounded-xl bg-superficie p-2 text-left"
                     >
                       {produto.imagem ? (
-                        <img src={produto.imagem.src} alt="" class="size-12 rounded-lg object-cover" loading="lazy" />
+                        <img
+                          src={produto.imagem.src}
+                          srcset={produto.imagem.srcset}
+                          sizes="48px"
+                          alt=""
+                          class="size-12 rounded-lg object-cover"
+                          loading="lazy"
+                        />
                       ) : null}
                       <span class="min-w-0 flex-1">
                         <span class="block truncate text-sm font-medium">{produto.nome}</span>

@@ -25,6 +25,8 @@ export interface Imagem {
   alt: string;
   largura: number;
   altura: number;
+  /** Versões em outras larguras ("/img/x-400.webp 400w, /img/x-800.webp 800w"); o navegador escolhe a menor que basta. */
+  srcset?: string;
 }
 
 export interface Produto {

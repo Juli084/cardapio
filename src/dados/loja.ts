@@ -1,10 +1,21 @@
-import type { GrupoDeOpcoes, Loja } from "../dominio/tipos.ts";
+import type { GrupoDeOpcoes, Imagem, Loja } from "../dominio/tipos.ts";
 
 /*
  * Configuração da loja de demonstração. Para montar o cardápio de outra lanchonete,
  * só este arquivo e as fotos em public/img mudam. Preços em centavos: 3290 = R$ 32,90.
  * O passo a passo está em docs/nova-loja.md.
  */
+
+/** Foto quadrada de produto em public/img/produtos, nas larguras 400 e 800. */
+function foto(id: string, alt: string): Imagem {
+  return {
+    src: `/img/produtos/${id}-800.webp`,
+    srcset: `/img/produtos/${id}-400.webp 400w, /img/produtos/${id}-800.webp 800w`,
+    alt,
+    largura: 800,
+    altura: 800,
+  };
+}
 
 const PONTO: GrupoDeOpcoes = {
   id: "ponto",
@@ -119,8 +130,14 @@ export const loja = {
     dinheiro: true,
   },
   marca: {
-    logo: { src: "/img/classico.webp", alt: "", largura: 408, altura: 408 },
-    capa: { src: "/img/capa.webp", alt: "", largura: 1920, altura: 680 },
+    logo: { src: "/img/logo.svg", alt: "", largura: 160, altura: 160 },
+    capa: {
+      src: "/img/capa-1920.webp",
+      srcset: "/img/capa-960.webp 960w, /img/capa-1920.webp 1920w",
+      alt: "",
+      largura: 1920,
+      altura: 680,
+    },
     compartilhamento: {
       src: "/img/compartilhar.jpg",
       alt: "Hamburgueria do Francesco: hambúrguer artesanal em Sorocaba",
@@ -130,7 +147,7 @@ export const loja = {
     corPrimaria: "#f4a31a",
   },
   demonstracao: {
-    aviso: "Loja fictícia para demonstração: produtos, preços e chave Pix são de exemplo.",
+    aviso: "Loja fictícia para demonstração: produtos, fotos, preços e chave Pix são de exemplo.",
   },
   credito: { texto: "Cardápio digital por iTech Soluções Digitais", url: "https://itechsolucoesdigitais.com" },
   sugestoes: ["batata-frita", "guarana-lata", "brownie", "coca-cola-lata", "milkshake"],
@@ -150,7 +167,7 @@ export const loja = {
       descricao: "Clássico, batata frita P e uma bebida.",
       preco: 4490,
       precoAnterior: 5580,
-      imagem: { src: "/img/classico.webp", alt: "Hambúrguer clássico no pão brioche", largura: 408, altura: 408 },
+      imagem: foto("combo-classico", "Hambúrguer clássico com batata frita no cone e uma lata de refrigerante"),
       selos: ["mais-pedido"],
       grupos: [PONTO, BEBIDA_DO_COMBO, ADICIONAIS],
     },
@@ -161,6 +178,7 @@ export const loja = {
       descricao: "Smash Duplo, batata frita P e uma bebida.",
       preco: 4890,
       precoAnterior: 5980,
+      imagem: foto("combo-smash", "Smash duplo com batata frita no cone e uma lata de refrigerante"),
       grupos: [BEBIDA_DO_COMBO, ADICIONAIS],
     },
     {
@@ -171,6 +189,7 @@ export const loja = {
       preco: 9990,
       precoAnterior: 11160,
       serve: "Serve 2 pessoas",
+      imagem: foto("combo-casal", "Dois hambúrgueres, cesta de batata frita e refrigerante de 2 litros com dois copos"),
       grupos: [
         { ...PONTO, id: "ponto-1", nome: "Ponto do 1º hambúrguer" },
         { ...PONTO, id: "ponto-2", nome: "Ponto do 2º hambúrguer" },
@@ -182,7 +201,7 @@ export const loja = {
       nome: "Clássico",
       descricao: "Blend de 160 g, queijo prato, alface, tomate, cebola roxa e molho da casa.",
       preco: 3290,
-      imagem: { src: "/img/classico.webp", alt: "Hambúrguer clássico no pão brioche", largura: 408, altura: 408 },
+      imagem: foto("classico", "Hambúrguer no pão brioche com queijo prato, alface, tomate e cebola roxa"),
       selos: ["mais-pedido"],
       grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
     },
@@ -192,12 +211,7 @@ export const loja = {
       nome: "Especial do Francesco",
       descricao: "Dois blends de 160 g, cheddar, bacon, cebola caramelizada e barbecue da casa.",
       preco: 4990,
-      imagem: {
-        src: "/img/especial.webp",
-        alt: "Hambúrguer alto com queijo derretido, tomate e cebola roxa, ao lado de batatas fritas",
-        largura: 408,
-        altura: 408,
-      },
+      imagem: foto("especial", "Hambúrguer alto com dois blends, cheddar, bacon e cebola caramelizada"),
       selos: ["mais-pedido"],
       grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
     },
@@ -207,6 +221,7 @@ export const loja = {
       nome: "Smash Duplo",
       descricao: "Dois smash de 90 g, cheddar duplo, picles e cebola na chapa.",
       preco: 3690,
+      imagem: foto("smash-duplo", "Smash duplo com cheddar derretido, picles e cebola na chapa"),
       selos: ["novo"],
       grupos: [ADICIONAIS, VIRAR_COMBO],
     },
@@ -216,6 +231,7 @@ export const loja = {
       nome: "Cheddar Bacon",
       descricao: "Blend de 160 g, cheddar cremoso, bacon crocante e maionese de alho.",
       preco: 3990,
+      imagem: foto("cheddar-bacon", "Hambúrguer com cheddar cremoso escorrendo e bacon crocante"),
       grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
     },
     {
@@ -224,6 +240,7 @@ export const loja = {
       nome: "Pimenta",
       descricao: "Blend de 160 g, pepper jack, jalapeño, cebola crispy e maionese de chipotle.",
       preco: 4190,
+      imagem: foto("picante", "Hambúrguer com pepper jack, jalapeño e cebola crispy, com pimentas ao lado"),
       selos: ["picante"],
       grupos: [PONTO, ADICIONAIS, VIRAR_COMBO],
     },
@@ -233,6 +250,7 @@ export const loja = {
       nome: "Frango Crispy",
       descricao: "Sobrecoxa empanada, alface, tomate e maionese de ervas.",
       preco: 3490,
+      imagem: foto("frango-crispy", "Sanduíche de frango empanado com alface e tomate no pão brioche"),
       grupos: [ADICIONAIS, VIRAR_COMBO],
     },
     {
@@ -241,6 +259,7 @@ export const loja = {
       nome: "Grão-de-bico",
       descricao: "Hambúrguer de grão-de-bico, queijo prato, rúcula, tomate e maionese de ervas.",
       preco: 3390,
+      imagem: foto("grao-de-bico", "Hambúrguer de grão-de-bico com queijo, rúcula e tomate"),
       selos: ["vegetariano"],
       grupos: [VIRAR_COMBO],
     },
@@ -250,6 +269,7 @@ export const loja = {
       nome: "X-Salada",
       descricao: "Hambúrguer, queijo, alface, tomate e maionese no pão de hambúrguer.",
       preco: 2490,
+      imagem: foto("x-salada", "X-Salada no pão com gergelim, embrulhado em papel"),
       grupos: [ADICIONAIS_CHAPA],
     },
     {
@@ -258,6 +278,7 @@ export const loja = {
       nome: "X-Bacon",
       descricao: "Hambúrguer, queijo, bacon, alface, tomate e maionese.",
       preco: 2890,
+      imagem: foto("x-bacon", "X-Bacon com bastante bacon, queijo, alface e tomate"),
       grupos: [ADICIONAIS_CHAPA],
     },
     {
@@ -266,6 +287,7 @@ export const loja = {
       nome: "X-Tudo",
       descricao: "Hambúrguer, presunto, queijo, bacon, ovo, salsicha, alface, tomate, milho e batata palha.",
       preco: 3490,
+      imagem: foto("x-tudo", "X-Tudo alto com ovo, presunto, bacon, salsicha, milho e batata palha"),
       selos: ["mais-pedido"],
       grupos: [ADICIONAIS_CHAPA],
     },
@@ -275,12 +297,7 @@ export const loja = {
       nome: "Cachorro-quente",
       descricao: "Salsicha, vinagrete, batata palha, ketchup e mostarda.",
       preco: 1690,
-      imagem: {
-        src: "/img/cachorro-quente.webp",
-        alt: "Cachorro-quente com vinagrete e batata palha",
-        largura: 480,
-        altura: 480,
-      },
+      imagem: foto("cachorro-quente", "Cachorro-quente com vinagrete, batata palha, ketchup e mostarda"),
       grupos: [
         {
           id: "adicionais",
@@ -301,12 +318,7 @@ export const loja = {
       nome: "Choripán",
       descricao: "Pão francês, linguiça assada, vinagrete e chimichurri.",
       preco: 2790,
-      imagem: {
-        src: "/img/choripan.webp",
-        alt: "Choripán com linguiça, vinagrete e chimichurri",
-        largura: 480,
-        altura: 320,
-      },
+      imagem: foto("choripan", "Choripán com linguiça, vinagrete e chimichurri"),
     },
     {
       id: "batata-frita",
@@ -314,6 +326,7 @@ export const loja = {
       nome: "Batata frita",
       descricao: "Batata palito sequinha com sal e páprica.",
       preco: 1590,
+      imagem: foto("batata-frita", "Batata frita numa cestinha, com maionese ao lado"),
       selos: ["mais-pedido"],
       grupos: [
         {
@@ -347,6 +360,7 @@ export const loja = {
       descricao: "Batata frita coberta de cheddar cremoso e bacon em cubos.",
       preco: 3290,
       serve: "Serve 2 pessoas",
+      imagem: foto("batata-cheddar-bacon", "Batata frita coberta de cheddar e bacon em cubos"),
     },
     {
       id: "onion-rings",
@@ -354,6 +368,7 @@ export const loja = {
       nome: "Onion rings",
       descricao: "Doze anéis de cebola empanados, com barbecue da casa.",
       preco: 2490,
+      imagem: foto("onion-rings", "Anéis de cebola empanados com molho barbecue"),
     },
     {
       id: "mandioca",
@@ -362,13 +377,14 @@ export const loja = {
       descricao: "Mandioca cozida e frita, com manteiga de garrafa.",
       preco: 2290,
       serve: "Serve 2 pessoas",
+      imagem: foto("mandioca", "Mandioca frita com manteiga de garrafa"),
     },
     {
       id: "coca-cola-lata",
       categoria: "bebidas",
       nome: "Coca-Cola lata 350 ml",
       preco: 700,
-      imagem: { src: "/img/coca-cola-lata.webp", alt: "Lata de Coca-Cola", largura: 408, altura: 408 },
+      imagem: foto("coca-cola-lata", "Lata de refrigerante de cola gelada ao lado de um copo com gelo"),
       grupos: [
         {
           id: "versao",
@@ -387,13 +403,14 @@ export const loja = {
       categoria: "bebidas",
       nome: "Guaraná lata 350 ml",
       preco: 650,
-      imagem: { src: "/img/guarana-lata.webp", alt: "Lata de guaraná", largura: 408, altura: 408 },
+      imagem: foto("guarana-lata", "Lata de guaraná gelada ao lado de um copo com gelo"),
     },
     {
       id: "coca-cola-2l",
       categoria: "bebidas",
       nome: "Coca-Cola 2 L",
       preco: 1590,
+      imagem: foto("coca-cola-2l", "Garrafa de refrigerante de cola de 2 litros com dois copos com gelo"),
     },
     {
       id: "suco",
@@ -401,6 +418,7 @@ export const loja = {
       nome: "Suco natural 500 ml",
       descricao: "Feito na hora.",
       preco: 1190,
+      imagem: foto("suco", "Copo de suco de laranja com gelo e laranjas cortadas"),
       grupos: [
         {
           id: "sabor",
@@ -421,6 +439,7 @@ export const loja = {
       categoria: "bebidas",
       nome: "Água mineral 500 ml",
       preco: 450,
+      imagem: foto("agua", "Garrafa de água mineral ao lado de um copo com gelo e limão"),
       grupos: [
         {
           id: "tipo",
@@ -440,6 +459,7 @@ export const loja = {
       nome: "Milkshake",
       descricao: "Batido com sorvete de creme e chantilly.",
       preco: 1890,
+      imagem: foto("milkshake", "Milkshake de chocolate com chantilly e calda"),
       selos: ["novo"],
       grupos: [
         {
@@ -472,6 +492,7 @@ export const loja = {
       nome: "Brownie com sorvete",
       descricao: "Brownie de chocolate meio amargo, sorvete de creme e calda quente.",
       preco: 1990,
+      imagem: foto("brownie", "Brownie com sorvete de creme e calda de chocolate"),
     },
   ],
 } satisfies Loja;
