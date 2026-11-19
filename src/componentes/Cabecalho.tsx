@@ -20,9 +20,11 @@ export function Cabecalho({ loja, situacao, onSobre }: Props) {
         </p>
       ) : null}
 
-      <div class="relative h-40 overflow-hidden sm:h-56">
+      <div class="relative h-40 overflow-hidden sm:h-56 lg:h-80">
         <img
           src={capa.src}
+          srcset={capa.srcset}
+          sizes="100vw"
           alt={capa.alt}
           width={capa.largura}
           height={capa.altura}

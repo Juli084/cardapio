@@ -62,6 +62,8 @@ function ItemDoCardapio({ produto, onAbrir }: { produto: Produto; onAbrir: (prod
           <span class="relative shrink-0 self-start">
             <img
               src={produto.imagem.src}
+              srcset={produto.imagem.srcset}
+              sizes="104px"
               alt=""
               width={produto.imagem.largura}
               height={produto.imagem.altura}
@@ -114,6 +116,8 @@ function Destaques({ produtos, onAbrir }: { produtos: readonly Produto[]; onAbri
             >
               <img
                 src={produto.imagem!.src}
+                srcset={produto.imagem!.srcset}
+                sizes="176px"
                 alt=""
                 width={produto.imagem!.largura}
                 height={produto.imagem!.altura}

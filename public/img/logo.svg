@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Hamburgueria do Francesco">
+  <rect width="160" height="160" fill="#f4a31a"/>
+  <g fill="#1b1206">
+    <path d="M34 72c0-22 20-36 46-36s46 14 46 36c0 3-2 5-5 5H39c-3 0-5-2-5-5Z"/>
+    <rect x="28" y="84" width="104" height="14" rx="7"/>
+    <path d="M36 105h88v4c0 10-8 17-18 17H54c-10 0-18-7-18-17v-4Z"/>
+  </g>
+  <g fill="#f4a31a">
+    <ellipse cx="64" cy="54" rx="4" ry="2.4" transform="rotate(-20 64 54)"/>
+    <ellipse cx="82" cy="47" rx="4" ry="2.4" transform="rotate(10 82 47)"/>
+    <ellipse cx="99" cy="56" rx="4" ry="2.4" transform="rotate(25 99 56)"/>
+    <ellipse cx="76" cy="62" rx="4" ry="2.4" transform="rotate(-5 76 62)"/>
+  </g>
+</svg>

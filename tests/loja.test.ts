@@ -67,7 +67,14 @@ describe("configuração da loja", () => {
   });
 
   it("aponta para imagens que existem em public/, com texto alternativo nos produtos", () => {
-    for (const imagem of imagens) expect(existsSync(`public${imagem.src}`), imagem.src).toBe(true);
+    for (const imagem of imagens) {
+      expect(existsSync(`public${imagem.src}`), imagem.src).toBe(true);
+      for (const versao of imagem.srcset?.split(",") ?? []) {
+        const [caminho, largura] = versao.trim().split(" ");
+        expect(largura, versao).toMatch(/^\d+w$/);
+        expect(existsSync(`public${caminho}`), caminho).toBe(true);
+      }
+    }
     for (const produto of config.produtos) if (produto.imagem) expect(produto.imagem.alt, produto.id).not.toBe("");
   });
 
