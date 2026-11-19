@@ -12,16 +12,22 @@ Leva umas duas horas com as informações em mãos. Peça ao dono da loja, antes
 
 ## 1. Fotos
 
-Coloque as imagens em `public/img/` em WebP, no tamanho em que aparecem:
+Coloque as imagens em `public/img/`, em WebP:
 
-| Uso | Tamanho sugerido |
+| Uso | Arquivos |
 |---|---|
-| Produto | 480 × 480 |
-| Logo | 408 × 408 |
-| Capa do topo | 1920 × 680 |
+| Produto | `produtos/<id>-400.webp` e `produtos/<id>-800.webp`, quadrados |
+| Logo | `logo.svg`, ou PNG/WebP quadrado de 320 × 320 |
+| Capa do topo | `capa-960.webp` e `capa-1920.webp`, na proporção 1920 × 680 |
 | Prévia do link (`compartilhar.jpg`) | 1200 × 630, em JPEG |
 
-A prévia do link precisa ser JPEG ou PNG, porque nem todo aplicativo mostra WebP na prévia.
+Com as duas larguras, a lista carrega a foto de 400 e a ficha do produto, a de 800. A função
+`foto(id, alt)` em `loja.ts` monta os dois caminhos a partir do id do produto. A prévia do link
+precisa ser JPEG ou PNG, porque nem todo aplicativo mostra WebP na prévia.
+
+As fotos da demonstração foram geradas com o gerador de imagens do Canva e são ilustrativas.
+Numa loja real, use fotos dos pratos de verdade: a foto do cardápio é o que o cliente espera
+receber.
 
 ## 2. Configuração
 

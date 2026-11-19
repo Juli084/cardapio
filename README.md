@@ -5,7 +5,11 @@ entrega pronto no WhatsApp da loja: itens com opções, taxa do bairro, forma de
 troco e, no Pix, o código "copia e cola" já com o valor do pedido.
 
 **Demonstração:** [cardapio-gilt-ten.vercel.app](https://cardapio-gilt-ten.vercel.app). A
-hamburgueria é fictícia, e os preços e a chave Pix são de exemplo.
+hamburgueria é fictícia, e os preços e a chave Pix são de exemplo. As fotos dos 26 produtos e a
+capa foram geradas com o gerador de imagens do Canva e são ilustrativas; numa loja real, entram
+as fotos dos pratos de verdade.
+
+![Telas do cardápio no celular: topo da loja, lista de combos e ficha do produto com opções](docs/telas.webp)
 
 Fiz para o tipo de loja que hoje recebe pedido digitado à mão no WhatsApp e perde tempo
 perguntando sabor, ponto da carne, bairro e troco. O site é estático, sem servidor e sem
@@ -36,6 +40,9 @@ Detalhes que fazem diferença no uso:
 - **Prévia do link.** Ao colar o endereço no WhatsApp ou no Instagram, aparece a imagem
   `public/img/compartilhar.jpg` com nome e descrição. As metatags saem prontas no HTML do
   build, porque os robôs de prévia não executam JavaScript.
+- **Fotos leves.** Cada foto existe em 400 e 800 px de largura, em WebP. A lista baixa a de
+  400 e a ficha do produto, a de 800; a capa tem versões de 960 e 1920 px. A lista inteira
+  com fotos pesa menos de 700 KB.
 
 ## Como o pedido chega na loja
 
@@ -148,8 +155,8 @@ push e pull request.
   código-fonte. Desconto, por enquanto, a loja aplica na conversa.
 - **Taxa por bairro, não por distância.** Calcular por distância exige geolocalização do
   endereço, que depende de um serviço pago de mapas.
-- **Fotos.** Só parte dos produtos da demonstração tem foto. Os sem foto aparecem em lista,
-  sem espaço vazio.
+- **Fotos geradas.** As fotos da demonstração não mostram pratos de uma cozinha real. Produto
+  sem foto continua funcionando: aparece em lista, sem espaço vazio.
 - **Aviso do `npm audit`.** O `picomatch`, usado pelo Vite e pelo Vitest para ler padrões de
   arquivo durante o desenvolvimento, tem um alerta de ReDoS
   ([GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf)) ainda sem versão
